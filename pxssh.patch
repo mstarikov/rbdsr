@@ -1,0 +1,11 @@
+--- a/pxssh.py  2015-11-17 00:38:50.000000000 +1100
++++ b/pxssh.py  2015-11-17 00:39:47.000000000 +1100
+@@ -132,6 +132,8 @@
+         # If latency is worse than these values then this will fail.
+         # first two lines below are from "http://stackoverflow.com/questions/21055943/pxssh-connecting-to-an-ssh-proxy-timeout-exceeded-in-read-nonblocking"
+ 
++        self.sendline()
++        time.sleep(0.5)
+         self.read_nonblocking(size=10000,timeout=1) # GAS: Clear out the cache before getting the prompt
+         time.sleep(0.1)
+         self.sendline()
