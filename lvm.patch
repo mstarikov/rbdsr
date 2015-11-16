@@ -1,0 +1,11 @@
+--- a/lvm.conf  2015-11-16 12:04:53.000000000 +1100
++++ b/lvm.conf  2015-11-16 12:05:25.000000000 +1100
+@@ -96,7 +96,7 @@
+     # List of pairs of additional acceptable block device types found 
+     # in /proc/devices with maximum (non-zero) number of partitions.
+     # types = [ "fd", 16 ]
+-    types= [ "nvme", 64, "mtip32xx", 64 ]
++    types= [ "nvme", 64, "mtip32xx", 64 , "rbd", 64 ]
+ 
+     # If sysfs is mounted (2.6 kernels) restrict device scanning to 
+     # the block devices it believes are valid.
