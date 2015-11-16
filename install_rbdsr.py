@@ -1,8 +1,10 @@
 #!/usr/bin/python
 ''' Install script which will do following:
-1. enable rbd on boot via modprobe.conf
+1. add modprobe rbd to rc.modules
 2. patch lvm.conf to detect volumes on rbd block devices
-3. patch LVHDoISCSISR.py to redirect port 6789 requests to RBDSR.py'''
+3. patch LVHDoISCSISR.py to redirect port 6789 requests to RBDSR.py
+4. patch pxssh.py to allow remote commands
+5. copy RBDSR.py to /opt/xensource/sm'''
 
 import os, sys, shutil, subprocess
 
