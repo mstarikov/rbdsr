@@ -2,7 +2,9 @@
 
 XenServer demo RBD SR, implemented as an extension of the exsiting iSCSI SR
 
-In XenServer 6.5, rbd module has been enbled on the kernel. As a result, RBD blocks can be attached to Dom0 with sysfs command like ones described here: http://docs.ceph.com/docs/argonaut/rbd/rbd-ko/
+In XenServer 6.5, rbd module has been enbled on the kernel. As a result, RBD blocks can be attached to Dom0 with sysfs command like the one described here: http://docs.ceph.com/docs/argonaut/rbd/rbd-ko/
+
+Once the RBD block device is mapped, LVM SR can be created on top of it and shared across a XenServer pool.
 
 ## Install
 
