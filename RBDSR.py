@@ -249,7 +249,6 @@ class RBDSR(ISCSISR.ISCSISR):
             if not os.path.exists('/sys/bus/rbd'):
                 os.execlp("modprobe", "modprobe", "rbd")
             rbd_disk_path =  '/dev/disk/by-id/scsi-%s' % rbd_image_name
-            # TODO: not correctly implemented - in by-scsid it should be a folder containing block links
             rbd_scsi_path =  '/dev/disk/by-scsid/%s' % rbd_image_name
             rbd_block_index = self._getRBD_index(rbd_image_name)
             if not os.path.exists(rbd_disk_path) and not rbd_block_index:
@@ -257,8 +256,10 @@ class RBDSR(ISCSISR.ISCSISR):
                     rbd_add = open('/sys/bus/rbd/add','w')
                     rbd_add.write(attach_string)
                     rbd_add.close() 
-                    os.symlink('/dev/rbd%s' % str(self._getRBD_index(rbd_image_name)), rbd_disk_path)
-                    os.symlink('/dev/rbd%s' % str(self._getRBD_index(rbd_image_name)), rbd_scsi_path)
+                    rbd_image_index = str(self._getRBD_index(rbd_image_name))
+                    os.symlink('/dev/rbd%s' % rbd_image_index , rbd_disk_path)
+                    os.makedirs(rbd_scsi_path)
+                    os.symlink('../../../rbd%s' % rbd_device_index, '%s/rbd%s' % (rbd_disk_path,rbd_device_index))
                     self.attached = True
                 except IOError, e:
                     util.SMlog('the error is %s' % e)
@@ -266,7 +267,7 @@ class RBDSR(ISCSISR.ISCSISR):
         else:
             '''in iSCSI sr we need to attach target to interrogate LUN for size, scsi_id etc etc. 
             We don't need to do this with current way of finding things over ssh'''
-            pass
+            self.attached = True
       
       
     def detach(self, sr_uuid):
@@ -278,7 +279,7 @@ class RBDSR(ISCSISR.ISCSISR):
             if os.path.exists(rbd_disk_path):
                 os.unlink(rbd_disk_path)
             if os.path.exists(rbd_scsi_path):
-                os.unlink(rbd_scsi_path)
+                self._cleanCEPH_folder(rbd_scsi_path)
             if os.path.exists('/dev/rbd%s' % rbd_image_index):
                 rbd_remove = open('/sys/bus/rbd/remove','w')
                 rbd_remove.write(rbd_image_index)
