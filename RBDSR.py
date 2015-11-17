@@ -129,7 +129,7 @@ class RBDSR(ISCSISR.ISCSISR):
         
         
     def _formatMON_list(self, mon_addrs_xml):
-        addrs_xml = parseString(mon_addrs_xml[0].rstrip())
+        addrs_xml = parseString(mon_addrs_xml[1].rstrip())
         if not os.path.exists('/etc/rbd'):
             os.makedirs('/etc/rbd')
         addr_file = open('/etc/rbd/mons', 'w')
