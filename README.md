@@ -8,10 +8,10 @@ Once the RBD block device is mapped, LVM SR can be created on top of it and shar
 
 ## Install
 
-You can install this demo script automatically using rbd-install.py or apply each command manually.
-run 'rbd-install.py enable' on each host to patch all required files and copy RBDSR.py to /opt/xensource/sm
+You can install this demo script automatically using `rbd-install.py` or apply each command manually.
+Run `./rbd-install.py enable` on each host to patch all required files and copy RBDSR.py to `/opt/xensource/sm`.
 
-if for some reason you are having problems with the install script, please let me know first and then perform following changes on each host in the pool to enable RBD SR
+If for some reason you are having problems with the install script, please [let me know](mailto:mr.mark.starikov@gmail.com) first and then perform following changes on each host in the pool to enable RBD SR:
 ```
 # patch /usr/lib/python2.4/site-packages/pxssh.py pxssh.patch
 # patch /etc/lvm.conf lvm.patch
@@ -25,12 +25,12 @@ if for some reason you are having problems with the install script, please let m
 RBDSR.py extends iSCSI SR(lvmoiscsi) functionality to attach rbd images to the Dom0 and place LVHDs(VHD inside of LVM volume) VDIs on top of that block device.
 
 Minimal requirements to create RBDSR are:
-target - IP address or hostname of the ceph monitor
-targetIQN - RBD pool name
-SCSIid - RBD image name
-chapuser - username of sudoer on ceph monitor
-chappassword - password of the ceph user
-port - monitor port number. currently only 6789 will divert LVHDoISCSISR into RBDSR
+* target - IP address or hostname of the ceph monitor
+* targetIQN - RBD pool name
+* SCSIid - RBD image name
+* chapuser - username of sudoer on ceph monitor
+* chappassword - password of the ceph user
+* port - monitor port number. currently only 6789 will divert LVHDoISCSISR into RBDSR
 
 ###### Examples
 To create SR you can use ragular sr-create syntax:
