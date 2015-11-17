@@ -39,4 +39,4 @@ To create SR you can use ragular sr-create syntax:
 ```
 Or via XenCenter:
 
-[XenCenter Create new RBD SR with caption](https://drive.google.com/file/d/0B1PjrwdL2YoLYkdWN1pENW9rRWc/preview)
+![XenCenter Create new RBD SR with caption](https://cloud.githubusercontent.com/assets/15868352/11228256/83176bc8-8ddf-11e5-9394-3a533f1ccf1b.png)
