@@ -163,7 +163,12 @@ class RBDSR(ISCSISR.ISCSISR):
             if not 'sudo' in block and '\r' in block: 
                 rbd_image_path = os.path.join(base_path, rbd_pool_name, block.rstrip())
                 rbd_image = open(rbd_image_path,'w')
-                image_info = self._getCEPH_response('sudo rbd --format json -p %s info %s' % (rbd_pool_name, block))[2]
+                image_info_response = self._getCEPH_response('sudo rbd --format json -p %s info %s' % (rbd_pool_name, block))
+                image_info = ''
+                if len(image_info_response) >=3:
+                    image_info = image_info_response[2]
+                else:
+                    image_info = image_info_response[1]
                 util.SMlog('RBD info of the image is %s' % image_info)
                 rbd_image.write('%s' % image_info)
                 rbd_image.close()
