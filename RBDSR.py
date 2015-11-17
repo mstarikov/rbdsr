@@ -79,15 +79,15 @@ class RBDSR(ISCSISR.ISCSISR):
             but parent class(LVHDoISCSI) needs 'attached' flag to print LUNs'''
             self.attached = True
             
-        ''' If we have SCSIid, means we have discovered targetIQN already and ready to attach rbd block'''    
+            ''' If we have SCSIid, means we have discovered targetIQN already and ready to attach rbd block'''    
         elif self.dconf.has_key('SCSIid'):
             self.path = '/dev/disk/by-id/scsi-%s' % self.dconf['SCSIid']
             if os.path.exists('/var/lock/sm/%s/sr' % sr_uuid):
                 self.attach(sr_uuid)
                 
-        ''' This is a bit backwards, but based on the previous two if/elif statements, here we don't have
-        either targetIQN nor SCSIid, which means we are at the begining of the XC iSCSI SR create dialog
-        and need to discover RBD pools from the monitors.'''
+            ''' This is a bit backwards, but based on the previous two if/elif statements, here we don't have
+            either targetIQN nor SCSIid, which means we are at the begining of the XC iSCSI SR create dialog
+            and need to discover RBD pools from the monitors.'''
         else:
             ### Getting RBD pool using ssh user and password
             rbd_pool_string = self._getCEPH_response('sudo ceph osd lspools')
@@ -228,7 +228,7 @@ class RBDSR(ISCSISR.ISCSISR):
                 return result[1:]
                 
                 
-      def attach(self, sr_uuid):
+    def attach(self, sr_uuid):
         ### Getting MON list using admin key above
         ceph_mon_list_xml = self._getCEPH_response('sudo ceph mon_status -f xml')
         ceph_mon_list = self._formatMON_list(ceph_mon_list_xml)
@@ -277,7 +277,7 @@ class RBDSR(ISCSISR.ISCSISR):
             pass
       
       
-      def detach(self, sr_uuid):
+    def detach(self, sr_uuid):
         if self.dconf.has_key('SCSIid') and self.dconf['SCSIid']:
             rbd_image_name = self.dconf['SCSIid']
             rbd_disk_path =  '/dev/disk/by-id/scsi-%s' % rbd_image_name
@@ -318,7 +318,7 @@ class RBDSR(ISCSISR.ISCSISR):
                 self.LUNs[obj.uuid] = obj
       
       
-      def _divert_query(self, vdi, path, rbd_id, rbd_size, lun_name):
+    def _divert_query(self, vdi, path, rbd_id, rbd_size, lun_name):
         vdi.uuid = scsiutil.gen_uuid_from_string(rbd_id)
         vdi.location = self.uuid
         vdi.vendor = 'RADOS'
@@ -333,7 +333,7 @@ class RBDSR(ISCSISR.ISCSISR):
         vdi.sm_config = sm_config
       
       
-      def _attach_LUN_bySCSIid(self, SCSIid):
+    def _attach_LUN_bySCSIid(self, SCSIid):
         if os.path.exists('/dev/disk/by-id/scsi-%s' % SCSIid):
             return True
         else:
