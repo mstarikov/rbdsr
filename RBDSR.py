@@ -81,8 +81,9 @@ class RBDSR(ISCSISR.ISCSISR):
             
             ''' If we have SCSIid, means we have discovered targetIQN already and ready to attach rbd block'''    
         elif self.dconf.has_key('SCSIid'):
+            self.attached = os.path.exists('/dev/disk/by-scsid/%s' % self.dconf['SCSIid'])
             self.path = '/dev/disk/by-id/scsi-%s' % self.dconf['SCSIid']
-            if os.path.exists('/var/lock/sm/%s/sr' % sr_uuid):
+            if os.path.exists('/var/lock/sm/%s/sr' % sr_uuid) and not self.attached:
                 self.attach(sr_uuid)
                 
             ''' This is a bit backwards, but based on the previous two if/elif statements, here we don't have
@@ -113,7 +114,6 @@ class RBDSR(ISCSISR.ISCSISR):
             raise xs_errors.XenError('ConfigTargetIQNMissing')
 
             self.targetIQN = unicode(self.dconf['targetIQN']).encode('utf-8')
-            self.attached = False
             
             
     def _formatCEPH_key(self, auth_key_string):
