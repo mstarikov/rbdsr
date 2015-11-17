@@ -1,6 +1,6 @@
 # RBDSR - CEPH plugin for XenServer 6.5
 
-XenServer demo RBD SR, implemented as an extension of the exsiting iSCSI SR
+XenServer demo RBD SR, implemented as an extension of the exsiting iSCSI(LVHDoISCSISR) SR
 
 In XenServer 6.5, rbd module has been enbled on the kernel. As a result, RBD blocks can be attached to Dom0 with sysfs command like the one described here: http://docs.ceph.com/docs/argonaut/rbd/rbd-ko/
 
