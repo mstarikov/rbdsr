@@ -9,7 +9,7 @@ Once the RBD block device is mapped, LVM SR can be created on top of it and shar
 ## Install
 
 You can install this demo script automatically using `rbd-install.py` or apply each command manually.
-Run `./rbd-install.py enable` on each host to patch all required files and copy RBDSR.py to `/opt/xensource/sm`.
+Run `python ./rbd-install.py enable` on each host to patch all required files and copy RBDSR.py to `/opt/xensource/sm`.
 
 If for some reason you are having problems with the install script, please [let me know](mailto:mr.mark.starikov@gmail.com) first and then perform following changes on each host in the pool to enable RBD SR:
 ```
