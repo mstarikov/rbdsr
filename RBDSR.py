@@ -121,7 +121,7 @@ class RBDSR(ISCSISR.ISCSISR):
             os.makedirs('/etc/rbd')
         a = open('/etc/rbd/auth', 'w')
         for words in auth_key_string:
-            if 'key' in words:
+            if 'key: ' in words:
                 rbd_admin_password = words.split('key: ')[1].rstrip()
         a.write(rbd_admin_password)
         a.close()
@@ -145,7 +145,7 @@ class RBDSR(ISCSISR.ISCSISR):
     def _formatRBD_pool(self, rbd_pool_string):
         base_path = '/var/lib/rbd/'
         pool_name_list = ''
-        for pool in rbd_pool_string[0].split(','):
+        for pool in rbd_pool_string[1].split(','):
             if not pool.isspace() and pool != '':
                 pool_name = pool.split(' ')[1]
                 pool_name_list += pool_name + '\n'
@@ -160,12 +160,13 @@ class RBDSR(ISCSISR.ISCSISR):
         pool_path = os.path.join(base_path, rbd_pool_name)
         self._cleanCEPH_folder(pool_path,False)
         for block in rbd_image_string:
-            rbd_image_path = os.path.join(base_path, rbd_pool_name, block.rstrip())
-            rbd_image = open(rbd_image_path,'w')
-            image_info = self._getCEPH_response('sudo rbd --format json -p %s info %s' % (rbd_pool_name, block))[0]
-            util.SMlog('RBD info of the image is %s' % image_info)
-            rbd_image.write('%s' % image_info)
-            rbd_image.close()
+            if not 'sudo' in block and '\r' in block: 
+                rbd_image_path = os.path.join(base_path, rbd_pool_name, block.rstrip())
+                rbd_image = open(rbd_image_path,'w')
+                image_info = self._getCEPH_response('sudo rbd --format json -p %s info %s' % (rbd_pool_name, block))[2]
+                util.SMlog('RBD info of the image is %s' % image_info)
+                rbd_image.write('%s' % image_info)
+                rbd_image.close()
         return 'list'
         
         
@@ -194,16 +195,6 @@ class RBDSR(ISCSISR.ISCSISR):
         return parent_folder
         
         
-    def __getCEPH_response(self, cmd):
-        user = self.srcmd.dconf['chapuser']
-        password = self._getCHAP_password()
-        target = self.srcmd.dconf['target'].split(',')[0]
-        port = self.srcmd.dconf['port']
-        if user and password:
-            response = ssh_client.ssh_cmd(target, password, cmd, user)
-            return response
-            
-            
     def _getCEPH_response(self, cmd):
         s = pxssh.pxssh()
         s.force_password = True
@@ -221,11 +212,7 @@ class RBDSR(ISCSISR.ISCSISR):
             s.sendline (cmd)
             s.prompt()
             result = s.before.split('\n')
-            s.logout()
-            if len(result) >= 3:
-                return result[1:-1]
-            else:
-                return result[1:]
+            return result
                 
                 
     def attach(self, sr_uuid):
