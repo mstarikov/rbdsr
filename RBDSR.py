@@ -259,7 +259,7 @@ class RBDSR(ISCSISR.ISCSISR):
                     rbd_image_index = str(self._getRBD_index(rbd_image_name))
                     os.symlink('/dev/rbd%s' % rbd_image_index , rbd_disk_path)
                     os.makedirs(rbd_scsi_path)
-                    os.symlink('../../../rbd%s' % rbd_device_index, '%s/rbd%s' % (rbd_disk_path,rbd_device_index))
+                    os.symlink('../../../rbd%s' % rbd_image_index, '%s/rbd%s' % (rbd_disk_path,rbd_image_index))
                     self.attached = True
                 except IOError, e:
                     util.SMlog('the error is %s' % e)
