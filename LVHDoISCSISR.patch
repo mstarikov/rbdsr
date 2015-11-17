@@ -1,5 +1,5 @@
---- a/LVHDoISCSISR.py   2015-11-16 12:30:53.000000000 +1100
-+++ b/LVHDoISCSISR.py   2015-11-16 12:31:50.000000000 +1100
+--- LVHDoISCSISR.py     2015-11-17 13:21:39.000000000 +1100
++++ LVHDoISCSISR.py-new 2015-11-17 13:23:24.000000000 +1100
 @@ -18,7 +18,7 @@
  # LVHDoISCSISR: LVHD over ISCSI software initiator SR driver
  #
@@ -9,16 +9,15 @@
  import statvfs, time
  import os, socket, sys, re
  import xs_errors
-@@ -76,8 +76,10 @@
-         if not sr_uuid:
+@@ -77,7 +77,10 @@
              # This is a probe call, generate a temp sr_uuid
              sr_uuid = util.gen_uuid()
--
+ 
 -        driver = SR.driver('iscsi')
 +        if self.original_srcmd.dconf.has_key('port') and '6789' in self.original_srcmd.dconf['port']:
 +            driver = SR.driver('rbd')
-+        else:                                                                   
-+            driver = SR.driver('iscsi')                                         
-         if self.original_srcmd.dconf.has_key('target'):                         
-             self.original_srcmd.dconf['targetlist'] = self.original_srcmd.dconf['target']                                                                        
++        else: 
++            driver = SR.driver('iscsi')
+         if self.original_srcmd.dconf.has_key('target'):
+             self.original_srcmd.dconf['targetlist'] = self.original_srcmd.dconf['target']
          iscsi = driver(self.original_srcmd, sr_uuid)
