@@ -35,7 +35,7 @@ Minimal requirements to create RBDSR are:
 ###### Examples
 To create SR you can use ragular sr-create syntax:
 ```
-# xe sr-create type=lvmoiscsi name-label=RADOS-SR shared=true device-config:target=<monitor ip address> device-config:targetIQN=<rbd pool name> device-config:SCSIid=<rbd image name> device-config:chapuser=<monitor sudoer username> device-config:chappassword=<ceph user password>
+# xe sr-create type=lvmoiscsi name-label=RADOS-SR shared=true device-config:target=<monitor ip address> device-config:port=6789 device-config:targetIQN=<rbd pool name> device-config:SCSIid=<rbd image name> device-config:chapuser=<monitor sudoer username> device-config:chappassword=<ceph user password>
 ```
 Or via XenCenter:
 
