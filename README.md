@@ -15,7 +15,9 @@ Once the RBD block device is mapped, LVM SR can be created on top of it and shar
 
 ## Install
 Download latest version of the pluging to each host: `wget https://github.com/mstarikov/rbdsr/archive/master.zip`
+
 Unzip the archive(wget on xenserver might strip the extension): `unzip master`
+
 Now you can install this demo script automatically using `rbd-install.py`. 
 Run `python ./rbd-install.py enable` on each host to patch all required files and copy RBDSR.py to `/opt/xensource/sm`.
 
