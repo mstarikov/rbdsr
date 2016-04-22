@@ -24,15 +24,15 @@ CONFIGURATION = [ [ 'SCSIid', 'The rbd image name' ], \
 
 DRIVER_INFO = {
     'name': 'RBD',
-    'description': 'Base RBD SR driver, provides a LUN-per-VDI. Does not support creation of VDIs but accesses existing LUNs on a target.',
-    'vendor': 'Citrix Systems Inc',
-    'copyright': '(C) 2008 Citrix Systems Inc',
+    'description': 'SR plugin which creates LVHDs on top of RBD object.',
+    'vendor': 'Mark Starikov',
+    'copyright': '(C) 2016 Mark Starikov',
     'driver_version': '1.0',
     'required_api_version': '1.0',
     'capabilities': CAPABILITIES,
     'configuration': CONFIGURATION
     }
-
+''' Should remove the iSCSI defaults, but need to test if they would break creating SR from XC'''
 # 2^16 Max port number value
 INITIATORNAME_FILE = '/etc/iscsi/initiatorname.iscsi'
 SECTOR_SHIFT = 9
@@ -273,6 +273,7 @@ class RBDSR(ISCSISR.ISCSISR):
     def detach(self, sr_uuid):
         if self.dconf.has_key('SCSIid') and self.dconf['SCSIid']:
             rbd_image_name = self.dconf['SCSIid']
+            ''' should have pool and rbd name combination for better uniqueness of the link '''
             rbd_disk_path =  '/dev/disk/by-id/scsi-%s' % rbd_image_name
             rbd_scsi_path =  '/dev/disk/by-scsid/%s' % rbd_image_name
             rbd_image_index = self._getRBD_index(rbd_image_name)
