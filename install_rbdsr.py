@@ -34,38 +34,38 @@ if __name__ == "__main__":
     if os.path.exists('lvm.patch'):
         print('#### and lvm.patch is here as well  ####')
     else:
-        print('Couldn\'t find lvm.pacth here - download package again')
+        print('Couldn\'t find lvm.patch here - download package again')
         sys.exit(1)
 
-    if os.path.exists('lvm-master.patch'):
+    if os.path.exists('lvm-master7.patch'):
         print('#### and lvm-master7.patch is here as well  ####')
     else:
-        print('Couldn\'t find lvm-master7.pacth here - download package again')
+        print('Couldn\'t find lvm-master7.patch here - download package again')
         sys.exit(1)
 
 
     if os.path.exists('lvm7.patch'):
         print('#### and lvm7.patch is here as well  ####')
     else:
-        print('Couldn\'t find lvm7.pacth here - download package again')
+        print('Couldn\'t find lvm7.patch here - download package again')
         sys.exit(1)
 
     if os.path.exists('pxssh.patch'):
         print('#### and pxssh.patch is here as well  ####')
     else:
-        print('Couldn\'t find pxssh.pacth here - download package again')
+        print('Couldn\'t find pxssh.patch here - download package again')
         sys.exit(1)
 
     if os.path.exists('RBDSR7.patch'):
         print('#### and RBDSR7.patch is here as well  ####')
     else:
-        print('Couldn\'t find RBDSR7.pacth here - download package again')
+        print('Couldn\'t find RBDSR7.patch here - download package again')
         sys.exit(1)
 
     if os.path.exists('LVHDoISCSISR.patch'):
         print('#### and LVHDoSCSISR7.patch is here as well  ####')
     else:
-        print('Couldn\'t find LVHDoISCSISR7.pacth here - download package again')
+        print('Couldn\'t find LVHDoISCSISR7.patch here - download package again')
         sys.exit(1)
     print('\n########################################\n\nWe have all files we need, enabling RBDSR:')
     print('Enabling rbd driver on boot via rc.modules(ref https://www.centos.org/docs/)')
@@ -126,12 +126,12 @@ if __name__ == "__main__":
         sys.exit(1)
     
     try:
+        shutil.copyfile(current_path + '/RBDSR.py', 'RBDSR.py')
         if version == '7':
             subprocess.call(["patch", "RBDSR.py", "%s/RBDSR7.patch" % current_path])
     except OSError, e:
         print 'Couldn\'t patch RBDSR.py. Error: %s [errno=%s]' % (e.args)
         sys.exit(1)
-    shutil.copyfile(current_path + '/RBDSR.py', 'RBDSR.py')
     print('....\nRBDSR.py has been copied to /opt/xensource/sm')
 
     sys.exit(0)
