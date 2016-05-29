@@ -1,4 +1,4 @@
-# RBDSR - CEPH plugin for XenServer 6.5
+# RBDSR - CEPH plugin for XenServer 6.5 and 7(testing)
 This plugin automates creation and attaching RBD objects to XenServer as an SR. It creates LVM Volume group on top of the attached RBD object and then uses LVs as LVHD VDIs.
 
 XenServer demo RBD SR, implemented as an extension of the exsiting iSCSI(LVHDoISCSISR) SR. It doesn't mean that it uses iSCSI per se, but rather forks iSCSI storage plugin operation path, to take advantage of creating SR from XenCenter.
@@ -20,6 +20,8 @@ Unzip the archive(wget on xenserver might strip the extension): `unzip master`
 
 Now you can install this demo script automatically using `rbd-install.py`. 
 Run `python ./rbd-install.py enable` on each host to patch all required files and copy RBDSR.py to `/opt/xensource/sm`.
+
+rbd-install.py will automatically detect the version of the XenServer and apply corresponding patches to 6.5 or 7. 
 
 If for some reason you are having problems with the install script, please [let me know](mailto:mr.mark.starikov@gmail.com) first and then perform following changes on each host in the pool to enable RBD SR:
 ```
