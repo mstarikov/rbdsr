@@ -1,0 +1,39 @@
+--- /root/rbdsr-master/RBDSR.py	2016-04-22 14:43:47.000000000 +1000
++++ RBDSR.py	2016-05-27 13:07:43.000000000 +1000
+@@ -1,12 +1,12 @@
+ #!/usr/bin/python
+-# Following ISCSISR.py as an example, RBDSR provides LVHD SR over rbd block device.
++# Following BaseISCSI.py as an example, RBDSR provides LVHD SR over rbd block device.
+ # created by Mark Starikov(mr.mark.starikov@gmail.com)
+ 
+-import ISCSISR, VDI, scsiutil, SR, SRCommand, util, xs_errors, xmlrpclib, LUNperVDI 
++import BaseISCSI, VDI, scsiutil, SR, SRCommand, util, xs_errors, xmlrpclib, LUNperVDI 
+ import socket, os, copy, sys, pxssh
+ from xml.dom.minidom import parseString
+ 
+-''' start of modified parameters, pretty much direct copy from ISCSISR.py '''
++''' start of modified parameters, pretty much direct copy from BaseISCSI.py '''
+ CAPABILITIES = ["SR_PROBE","VDI_CREATE","VDI_DELETE","VDI_ATTACH",
+                 "VDI_DETACH", "VDI_INTRODUCE"]
+ 
+@@ -42,9 +42,9 @@
+ ISCSI_PROCNAME = "iscsi_tcp"
+ # changing default port to monitor port
+ DEFAULT_PORT = 6789
+-''' end of modified definitions of paramters like in ISCSISR.py '''
++''' end of modified definitions of paramters like in BaseISCSI.py '''
+ 
+-class RBDSR(ISCSISR.ISCSISR):
++class RBDSR(BaseISCSI.BaseISCSISR):
+     def handles(type):
+         if type == "rbd":
+             return True
+@@ -108,7 +108,7 @@
+                      pool = "*"
+                 map.append((real_address+":"+self.dconf['port'],"0",pool))
+             util.SMlog(map)
+-            # Recycling code here and calling print_entries from ISCSISR.py
++            # Recycling code here and calling print_entries from BaseISCSI.py
+             super(RBDSR, self).print_entries(map)
+             # User hasn't selected targetIQN yet, so throwing xs_error like in its iSCSI counterpart
+             raise xs_errors.XenError('ConfigTargetIQNMissing')
