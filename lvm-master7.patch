@@ -1,0 +1,10 @@
+--- a/lvm.conf	2016-05-30 00:24:25.000000000 +1000
++++ b/lvm.conf	2016-05-30 00:24:09.000000000 +1000
+@@ -175,6 +175,7 @@
+ 	# 
+ 	# Example
+ 	# types = [ "fd", 16 ]
++        types = [ "rbd", 1024 ]
+ 	# 
+ 	# This configuration option is advanced.
+ 	# This configuration option does not have a default value defined.
