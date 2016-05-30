@@ -85,11 +85,13 @@ if __name__ == "__main__":
         print 'Couldn\'t set execute permissions to rc.modules. Error: %s [errno=%s]' % (e.args)
         sys.exit(1)
     current_path = os.path.dirname(os.path.realpath(__file__))
-    os.chdir('/usr/lib/python2.7/site-packages/')
+    
     if version == '7':
+        os.chdir('/usr/lib/python2.7/site-packages/')
         shutil.copy('%s/pxssh.py' % current_path, 'pxssh.py')
         shutil.copy('%s/pexpect.py' % current_path, 'pexpect.py')
     else:
+        os.chdir('/usr/lib/python2.4/site-packages/')
         shutil.copy('pxssh.py','pxssh.py-oring')
         try:
             subprocess.call(["patch", "pxssh.py", "%s/pxssh.patch" % current_path])
