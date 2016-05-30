@@ -1,5 +1,5 @@
---- /root/rbdsr-master/RBDSR.py	2016-04-22 14:43:47.000000000 +1000
-+++ RBDSR.py	2016-05-27 13:07:43.000000000 +1000
+--- a/RBDSR.py	2016-05-30 14:36:09.000000000 +1000
++++ b/RBDSR.py	2016-05-30 14:38:14.000000000 +1000
 @@ -1,12 +1,12 @@
  #!/usr/bin/python
 -# Following ISCSISR.py as an example, RBDSR provides LVHD SR over rbd block device.
@@ -37,3 +37,51 @@
              super(RBDSR, self).print_entries(map)
              # User hasn't selected targetIQN yet, so throwing xs_error like in its iSCSI counterpart
              raise xs_errors.XenError('ConfigTargetIQNMissing')
+@@ -221,6 +221,10 @@
+                 
+                 
+     def attach(self, sr_uuid):
++        # LVHDoISCSI likes to call attach to get target information. if we have block device already attached, we don't need to do it again
++        if self.dconf.has_key('SCSIid') and self.dconf['SCSIid'] and os.path.exists('/dev/rbd%s' % self._getRBD_index(self.dconf['SCSIid'])):
++            self.attached = True 
++            return
+         ### Getting MON list using admin key above
+         ceph_mon_list_xml = self._getCEPH_response('sudo ceph mon_status -f xml')
+         ceph_mon_list = self._formatMON_list(ceph_mon_list_xml)
+@@ -262,7 +266,7 @@
+                     os.symlink('../../../rbd%s' % rbd_image_index, '%s/rbd%s' % (rbd_scsi_path,rbd_image_index))
+                     self.attached = True
+                 except IOError, e:
+-                    util.SMlog('the error is %s' % e)
++                    util.SMlog('Attach thrown exception and the error is %s' % e)
+                     self.attached = False
+         else:
+             '''in iSCSI sr we need to attach target to interrogate LUN for size, scsi_id etc etc. 
+@@ -282,15 +286,21 @@
+             if os.path.exists(rbd_scsi_path):
+                 self._cleanCEPH_folder(rbd_scsi_path)
+             if os.path.exists('/dev/rbd%s' % rbd_image_index):
+-                rbd_remove = open('/sys/bus/rbd/remove','w')
+-                rbd_remove.write(rbd_image_index)
+-                rbd_remove.close()
+-        self.attached = False
++                try:
++                    util.time.sleep(MAX_TIMEOUT) 
++                    with open('/sys/bus/rbd/remove','w') as rem:
++                        util.SMlog("Writing %s into rbd/remove" % rbd_image_index)
++                        rem.write(rbd_image_index)
++                        self.attached = False
++                except IOError, e:
++                    util.SMlog('Detach thrown exception and the error is %s' % e)
++                    self.attached = True
+       
+       
+     def refresh(self):
+-        # Unlike iSCSI SR we don't need to refresh paths or rescan sessions
+-        pass
++        # Unlike iSCSI SR we don't need to refresh paths or rescan sessions,
++        # but if disk hasn't been attached already(like when creating SR) we can do it now
++        self.attach('temp_mount')
+ 
+     def print_LUNs(self):
+         self.LUNs = {}
