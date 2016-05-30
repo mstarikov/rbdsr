@@ -1,0 +1,23 @@
+--- a/scsiutil.py	2016-05-30 14:39:52.000000000 +1000
++++ b/scsiutil.py	2016-05-30 14:41:08.000000000 +1000
+@@ -98,12 +98,14 @@
+         Raise:
+             util.CommandException
+     """
+-
+-    try:
+-        stdout = util.pread2([SCSI_ID_BIN, '-g', '--device', path])
+-    except util.CommandException: # fallback call
+-        dev = rawdev(path)
+-        stdout = util.pread2([SCSI_ID_BIN, '-g', '-s', '/block/%s' % dev])
++    if 'rbd' in rawdev(path):
++        stdout = util.pread2(['echo', path.split('-')[2]])
++    else:
++        try:
++            stdout = util.pread2([SCSI_ID_BIN, '-g', '--device', path])
++        except util.CommandException: # fallback call
++            dev = rawdev(path)
++            stdout = util.pread2([SCSI_ID_BIN, '-g', '-s', '/block/%s' % dev])
+ 
+     return SCSIid_sanitise(stdout[:-1])
+ 
