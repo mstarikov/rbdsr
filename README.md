@@ -21,16 +21,28 @@ Unzip the archive(wget on xenserver might strip the extension): `unzip master`
 Now you can install this demo script automatically using `rbd-install.py`. 
 Run `python ./rbd-install.py enable` on each host to patch all required files and copy RBDSR.py to `/opt/xensource/sm`.
 
-rbd-install.py will automatically detect the version of the XenServer and apply corresponding patches to 6.5 or 7. 
+rbd-install.py will automatically detect the version of the XenServer and apply corresponding patches to XenServer 6.5 or 7.0. 
 
 If for some reason you are having problems with the install script, please [let me know](mailto:mr.mark.starikov@gmail.com) first and then perform following changes on each host in the pool to enable RBD SR:
 ```
-# patch /usr/lib/python2.4/site-packages/pxssh.py pxssh.patch
-# patch /etc/lvm.conf lvm.patch
-# patch /opt/xensource/sm/LVHDoISCSISR.py LVHDoISCSISR.patch
+FOR ALL VERSIONS:
 # echo modprobe rbd >> /etc/rc.modules 
 # chmod +x /etc/rc.modules
 # cp RBDSR.py /opt/xensource/sm/
+
+FOR XENSERVER 6.5:
+# patch /usr/lib/python2.4/site-packages/pxssh.py pxssh.patch
+# patch /etc/lvm.conf lvm.patch
+# patch /opt/xensource/sm/LVHDoISCSISR.py LVHDoISCSISR.patch
+
+FOR XENSERVER 7.0:
+# cp pxssh.py /usr/lib/python2.7/site-packages/
+# cp pexpect.py /usr/lib/python2.7/site-package/
+# patch /etc/lvm/lvm.conf lvm7.patch
+# patch /etc/lvm/master/lvm.conf lvm-master7.patch
+# patch /opt/xensource/sm/LVHDoISCSISR.py LVHDoISCSISR7.patch
+# patch /opt/xensource/sm/RBDSR.py RBDSR7.patch
+# patch /opt/xensource/sm/scsiutil.py scsiutil7.patch
 ```
 ## Usage
 
