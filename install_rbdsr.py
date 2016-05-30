@@ -133,5 +133,12 @@ if __name__ == "__main__":
         print 'Couldn\'t patch RBDSR.py. Error: %s [errno=%s]' % (e.args)
         sys.exit(1)
     print('....\nRBDSR.py has been copied to /opt/xensource/sm')
-
+    
+    try:
+        if version == '7':
+            subprocess.call(["patch", "scsiutil.py", "%s/scsiutil7.patch" % current_path])
+    except OSError, e:
+        print 'Couldn\'t patch scsiutil.py. Error: %s [errno=%s]' % (e.args)
+        sys.exit(1)
+        
     sys.exit(0)
