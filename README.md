@@ -9,7 +9,7 @@ This plugin takes adventage of the following changes in XenServer 6.5. In this v
 
 ```echo "$mons name=$name,secret=$secret $rbddev" > /sys/bus/rbd/add```
 
-like the one described here: line 49 https://github.com/ceph/ceph-docker/blob/master/examples/coreos/rbdmap/rbdmap
+like the one described here: https://github.com/ceph/ceph-docker/blob/master/examples/coreos/rbdmap/rbdmap#L51
 
 Once the RBD block device is mapped, LVM SR can be created on top of it and shared across a XenServer pool.
 
